@@ -1,0 +1,26 @@
+{
+  "name": "reversi-lambert",
+  "version": "0.0.1",
+  "description": "This is a web version of the game reversi",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RachelLamber/reversi-lambert.git"
+  },
+  "keywords": [
+    "lambert"
+  ],
+  "author": "Rachel Lambert",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/RachelLamber/reversi-lambert/issues"
+  },
+  "homepage": "https://github.com/RachelLamber/reversi-lambert#readme",
+  "dependencies": {
+    "node-static": "^0.7.11",
+    "socket.io": "^4.5.0"
+  }
+}
