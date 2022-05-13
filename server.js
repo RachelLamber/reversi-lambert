@@ -75,7 +75,7 @@ io.on('connection', (socket)=> {
      * }
      */
     socket.on('join_room', (payload) => {
-        serverLog('Server recieved a command', ''\join_room'\', JSON.stringify(payload));
+        serverLog('Server recieved a command', '\'join_room\'', JSON.stringify(payload));
     });
 
 });
