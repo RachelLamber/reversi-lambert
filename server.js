@@ -76,6 +76,59 @@ io.on('connection', (socket)=> {
      */
     socket.on('join_room', (payload) => {
         serverLog('Server recieved a command', '\'join_room\'', JSON.stringify(payload));
+        if ((typeof payload == 'undefined') || (payload===null)){
+            response = {};
+            response.result = 'fail';
+            response.message = 'client did not send a payload';
+            socket.emit('join_room_response',response);
+            serverLog('join_room command failed', JSON.stringify(response));
+            return;
+        }
+        let room = payload.room;
+        let username = payload.username;
+        if ((typeof room == 'undefined') || (romm===null)){
+            response = {};
+            response.result = 'fail';
+            response.message = 'client did not send a vaild room to join';
+            socket.emit('join_room_response',response);
+            serverLog('join_room command failed', JSON.stringify(response));
+            return;
+        }
+        if ((typeof username == 'undefined') || (username===null)){
+            response = {};
+            response.result = 'fail';
+            response.message = 'client did not send a valid username to join the chat room';
+            socket.emit('join_room_response',response);
+            serverLog('join_room command failed', JSON.stringify(response));
+            return;
+        }
+        /**Handle the command */
+        socket.join(room);
+
+        /**make sure client was put in room */
+        io.in(room).fetchSockets().then((sockets)=>{
+            serverLog('There are '+sockets.length+' clients in the room, '+room);
+            /**Socket didn't join the room */
+            if ((typeof sockets == 'undefined')||(sockets === null)||!sockets.includes(socket)){
+                response = {};
+                response.result = 'fail';
+                response.message = 'server internal error joining chat room';
+                socket.emit('join_room_response',response);
+                serverLog('join_room command failed', JSON.stringify(response));
+                return;
+            }
+
+            /**Socket did join room */
+            else{
+                response = {};
+                response.room = room;
+                response.username = username;
+                response.count = sockets.length;
+                io.of('/').to(room).emit('join_room_response', response);
+                serverLog('join_room succeeded', JSON.stringify(response));
+            }
+        });
     });
+
 
 });
