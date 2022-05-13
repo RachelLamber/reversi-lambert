@@ -45,7 +45,7 @@ io.on('connection', (socket)=> {
 
     }
 
-    serverLog('a page connected to the server'+socket.id);
+    serverLog('a page connected to the server: '+socket.id);
 
     socket.on('disconnect', () => {
         serverLog('a page disconnected from the server: ' + socket.id);
