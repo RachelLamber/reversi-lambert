@@ -86,7 +86,7 @@ io.on('connection', (socket)=> {
         }
         let room = payload.room;
         let username = payload.username;
-        if ((typeof room == 'undefined') || (romm===null)){
+        if ((typeof room == 'undefined') || (room===null)){
             response = {};
             response.result = 'fail';
             response.message = 'client did not send a vaild room to join';
