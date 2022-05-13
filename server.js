@@ -50,4 +50,32 @@ io.on('connection', (socket)=> {
     socket.on('disconnect', () => {
         serverLog('a page disconnected from the server: ' + socket.id);
     });
+
+    /**join room command handler */
+    /**Expected payload:
+     * {
+     *   'room' : the room to be joined
+     *   'username' : the name of the user joining the room
+     * }
+     * 
+     * join_room_response:
+     * {
+     *   'result': 'success',
+     *   'room': room that was joined,
+     *   username: the user that joined the room
+     *   count: the number of users in the chat room
+     * }
+     * 
+     * or
+     * {
+     *   'result': 'fail',
+     *   'message': the reason for failure,
+     *   'username': the user that joined the room
+     *   'count': the number of users in the chat room
+     * }
+     */
+    socket.on('join_room', (payload) => {
+        serverLog('Server recieved a command', ''\join_room\'', JSON.stringify(payload));
+    });
+
 });
