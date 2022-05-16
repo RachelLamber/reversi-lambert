@@ -200,6 +200,7 @@ io.on('connection', (socket)=> {
         io.of('/').to(room).emit('send_chat_message_response', response);
         serverLog('send_chat_message command succeeded', JSON.stringify(response));
         
+        
 
     });
 
