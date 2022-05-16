@@ -44,7 +44,7 @@ function sendChatMessage(){
     request.username = username;
     request.message = $('#chatMessage').val();
     console.log('**** Client log message, sending \'send_chat_message\' command: '+JSON.stringify(request));
-    socket.emit('sned_chat_message',request);
+    socket.emit('send_chat_message',request);
 }
 socket.on('send_chat_message_response',(payload)=> {
     if((typeof payload == 'undefined') || (payload === null)){
@@ -55,7 +55,7 @@ socket.on('send_chat_message_response',(payload)=> {
         console.log(payload.message);
         return;
     }
-    let newString = '<p class=\'chat_message\'><b>'+payload.username+'</b>: '+payload.message'</p>';
+    let newString = '<p class=\'chat_message\'><b>'+payload.username+'</b>: '+payload.message+'</p>';
     $('#messages').prepend(newString);
 })
 
