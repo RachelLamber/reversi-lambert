@@ -39,7 +39,6 @@ socket.on('join_room_response',(payload)=> {
 })
 
 function sendChatMessage(){
-    console.log('I AM HERE');
     let request = {};
     request.room = chatRoom;
     request.username = username;
