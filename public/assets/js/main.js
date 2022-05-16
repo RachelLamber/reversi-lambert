@@ -38,6 +38,16 @@ socket.on('join_room_response',(payload)=> {
     $('#messages').prepend(newString);
 })
 
+function sendChatMessage(){
+    let request = {};
+    request.room = chatRoom;
+    request.username = username;
+    request.message = $('#chatMessage').val();
+    console.log('**** Client log message, sending \'send_chat_message\' command: '+JSON.stringify(request));
+    socket.emit('sned_chat_message',request);
+}
+
+
 /*request to join the chatroom */
 
 $( () => {
