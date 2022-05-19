@@ -9,16 +9,21 @@ function getIRIParameterValue(requestedKey){
             return value;
         }
     }
+    return null;
 }
 
 let username = decodeURI(getIRIParameterValue('username'));
-if((typeof username == 'undefined') || (username === null)){
+if((typeof username == 'undefined') || (username === null) || (username === 'null')){
     username = "Anonymous_"+Math.floor(Math.random()*1000);
 }
 
 /*$('#messages').prepend('<b>'+username+' :</b>');*/
 
-let chatRoom = 'Lobby';
+/*let chatRoom = 'Lobby';*/
+let chatRoom = decodeURI(getIRIParameterValue('game_id'));
+if((typeof chatRoom == 'undefined') || (chatRoom === null) || (chatRoom === 'null')){
+    chatRoom = "Lobby";
+}
 
 let socket = io();
 socket.on('log', function(array){
@@ -68,6 +73,8 @@ $( () => {
     console.log('**** Client log message, sending \'join_room\' command: '+JSON.stringify(request));
     socket.emit('join_room',request);
 
+    $('#lobbyTitle').html(username+"'s Lobby");
+    
     $('#chatMessage').keypress( function (e){
         let key = e.which;
         if (key == 13){
