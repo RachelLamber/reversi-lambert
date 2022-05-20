@@ -46,6 +46,17 @@ socket.on('join_room_response',(payload)=> {
         return;
     }
     
+    /**If we are being notified of ourselves then ignore message */
+    if (payload.socket_id === socket.id){
+        return;
+    }
+
+    let domElements = $('.socket_'+payload.socket_id);
+    /**if we are being repeat notified then retunr */
+    if (domElements.length !== 0){
+        return;
+    }
+
     let nodeA = $("<div></div>");
     nodeA.addClass('row');
     nodeA.addClass('align-items-center');
