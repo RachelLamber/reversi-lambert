@@ -31,7 +31,7 @@ socket.on('log', function(array){
 });
 
 function makeInviteButton(){
-    serverLog('the makeIviteButton function has been called!');
+    console.log('the makeIviteButton function has been called!');
     let newHTML = "<button type='button' class='btn btn-outline-primary'>Invite</button>";
     let newNode = $(newHTML);
     return newNode;
@@ -57,7 +57,7 @@ socket.on('join_room_response',(payload)=> {
     if (domElements.length !== 0){
         return;
     }
-    serverLog('We are about to call some nodes!!!');
+    console.log('We are about to call some nodes!!!');
     let nodeA = $("<div></div>");
     nodeA.addClass('row');
     nodeA.addClass('align-items-center');
@@ -146,9 +146,9 @@ $( () => {
     request.username = username;
     console.log('**** Client log message, sending \'join_room\' command: '+JSON.stringify(request));
     socket.emit('join_room',request);
-    serverLog('I am the making the Lobby show your name');
+    console.log('I am the making the Lobby show your name');
     $('#lobbyTitle').html(username+"'s Lobby");
-    serverLog('I am the lobby keypress code');
+    console.log('I am the lobby keypress code');
     $('#chatMessage').keypress( function (e){
         let key = e.which;
         if (key == 13){
