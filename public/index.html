@@ -59,8 +59,10 @@
         window.location.href = "lobby.html?username=" + username;
       }
       $('#nameInput').keypress( function (e){
+        serverLog('I am the keypress code');
         let key = e.which;
         if (key == 13){
+          serverLog('I am the KEY 13!');
           $('button[id = lobbyButton]').click();
           return false;
         }
