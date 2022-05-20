@@ -39,6 +39,12 @@ socket.on('join_room_response',(payload)=> {
         console.log(payload.message);
         return;
     }
+    
+    let nodeA = $("<div></div>");
+    let nodeB = $("<div></div>");
+    let nodeC = $("<div></div>");
+    
+    /**Announcing in the chat that someone has arrived */
     let newHTML = '<p class=\'join_room_response\'>'+payload.username+' joined the '+payload.room+'. (There are '+payload.count+' users in this room)</p>';
     let newNode = $(newHTML);
     newNode.hide();
