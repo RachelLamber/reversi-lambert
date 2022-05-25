@@ -195,7 +195,7 @@ io.on('connection', (socket)=> {
         io.in(room).allSockets().then((sockets)=>{
             serverLog('There are '+sockets.length+' clients in the room, '+room);
             /**Inviteee isn't in the room */
-            if ((typeof sockets == 'undefined')||(sockets === null)||!sockets.has(srequested_user)){
+            if ((typeof sockets == 'undefined')||(sockets === null)||!sockets.has(requested_user)){
                 response = {
                     result : 'fail',
                     message : 'the user that was invited is no longer in the room'
