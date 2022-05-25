@@ -85,7 +85,7 @@ socket.on('invite_response',(payload)=> {
         console.log(payload.message);
         return;
     }
-    let newNode = makeInvitedButton(payload.socket_id);
+    let newNode = makePlayButton();
     $('.socket_'+payload.socket_id+' button').replaceWith(newNode);
     
 })
@@ -99,7 +99,8 @@ socket.on('invited',(payload)=> {
         console.log(payload.message);
         return;
     }
-    let newNode = makePlayButton();
+    
+    let newNode = makeInvitedButton(payload.socket_id);
     $('.socket_'+payload.socket_id+' button').replaceWith(newNode);
     
 })
