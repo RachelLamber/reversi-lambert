@@ -224,6 +224,84 @@ io.on('connection', (socket)=> {
         });
     });
 
+    socket.on('uninvite', (payload) => {
+        serverLog('Server recieved a command', '\'uninvite\'', JSON.stringify(payload));
+        if ((typeof payload == 'undefined') || (payload===null)){
+            response = {};
+            response.result = 'fail';
+            response.message = 'client did not send a payload';
+            socket.emit('uninvited',response);
+            serverLog('uninvite command failed', JSON.stringify(response));
+            return;
+        }
+
+        let requested_user = payload.requested_user;
+        let room = players[socket.id].room;
+        let username = players[socket.id].username;
+
+        if ((typeof requested_user == 'undefined') || (requested_user===null) || (requested_user === "")){
+            response = {
+                result : 'fail',
+                message : 'client did not request a vaild user to uninvite'
+            }
+          
+            socket.emit('uninvited',response);
+            serverLog('uninvite command failed', JSON.stringify(response));
+            return;
+        }
+        
+        if ((typeof room == 'undefined') || (room===null) || (room === "")){
+            response = {
+                result : 'fail',
+                message : 'the user that was uninvited does not have a room'
+            }
+            socket.emit('uninvited',response);
+            serverLog('uninvite command failed', JSON.stringify(response));
+            return;
+        }
+        if ((typeof username == 'undefined') || (username===null) || (username === "")){
+            response = {
+                result : 'fail',
+                message : 'the user that was uninvited does not have a name registered'
+            }
+            socket.emit('uninvited',response);
+            serverLog('uninvite command failed', JSON.stringify(response));
+            return;
+        }
+
+        /**make sure that the invited player is present */
+        io.in(room).allSockets().then((sockets)=>{
+            serverLog('There are '+sockets.length+' clients in the room, '+room);
+            /**UnInviteee isn't in the room */
+            if ((typeof sockets == 'undefined')||(sockets === null)||!sockets.has(requested_user)){
+                response = {
+                    result : 'fail',
+                    message : 'the user that was uninvited is no longer in the room'
+                }
+                socket.emit('uninvited',response);
+                serverLog('uninvite command failed', JSON.stringify(response));
+                return;
+            }
+
+            /**UnInvitee is in the room */
+            else{
+                response = {
+                    result : 'success',
+                    socket_id : requested_user
+                }
+                socket.emit("uninvited", response);
+
+                response = {
+                    result : 'success',
+                    socket_id : socket.id
+                }
+                socket.to(requested_user).emit("uninvited", response);
+                serverLog('uninvite command succeded', JSON.stringify(response));
+
+            }
+        });
+    });
+
     socket.on('disconnect', () => {
         serverLog('a page disconnected from the server: ' + socket.id);
         if((typeof players[socket.id] != 'undefined') && (players[socket.id] != null)){
