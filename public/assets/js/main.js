@@ -77,6 +77,7 @@ function makeStartGameButton(){
 }
 
 socket.on('invite_response',(payload)=> {
+    console.log("client got invite response")
     if((typeof payload == 'undefined') || (payload === null)){
         console.log('server did not send a payload');
         return;
@@ -85,10 +86,10 @@ socket.on('invite_response',(payload)=> {
         console.log(payload.message);
         return;
     }
-    let newNode = makePlayButton();
+    let newNode = makeInvitedButton(payload.socket_id);
     $('.socket_'+payload.socket_id+' button').replaceWith(newNode);
-    
 })
+
 
 socket.on('invited',(payload)=> {
     if((typeof payload == 'undefined') || (payload === null)){
@@ -100,7 +101,7 @@ socket.on('invited',(payload)=> {
         return;
     }
     
-    let newNode = makeInvitedButton(payload.socket_id);
+    let newNode = makePlayButton();
     $('.socket_'+payload.socket_id+' button').replaceWith(newNode);
     
 })
