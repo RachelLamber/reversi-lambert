@@ -1,0 +1,18 @@
+body {
+    background-color: lightgrey;
+  }
+
+  .headerrow {
+    background-color: lavender;
+  }
+
+  .join_room_response, .left_room_response {
+    background-color: lavender;
+    /**margin: 1px 1px 1px 10px;*/
+  }
+
+  .chat_message{
+    font-size:125%;
+    margin: 1px 1px 1px 1px;
+    color: rgb(54, 54, 54);
+  }
