@@ -323,7 +323,7 @@ socket.on('game_update',(payload)=> {
             }
 
             const t = Date.now();
-            $('#'+row+'_'+column).html('<img class="img-fluid" src="assets/images/'+graphic+'?time='+t+'" alt="'+altTag+'" />');
+            $('#'+row+'_'+column).html('<img class="img-fluid" src="assets\'images\''+graphic+'?time='+t+'" alt="'+altTag+'" />');
         }
         }
     }
