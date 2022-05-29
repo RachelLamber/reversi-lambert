@@ -16,3 +16,15 @@ body {
     margin: 1px 1px 1px 1px;
     color: rgb(54, 54, 54);
   }
+
+  table#game_board {
+      border: 4px solid back;
+      margin: 0px;
+      padding:0px;
+  }
+
+  table#game_board td {
+    border: 1px solid back;
+    margin: 0px;
+    padding:0px;
+}
