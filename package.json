@@ -22,5 +22,8 @@
   "dependencies": {
     "node-static": "^0.7.11",
     "socket.io": "^4.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.16.0"
   }
 }

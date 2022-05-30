@@ -40,7 +40,7 @@ const io = new Server(app);
 io.on('connection', (socket)=> {
     /* Output a log message on the server and send it to the clients */
     function serverLog(...messages){
-        io.emit('log', ['**** Message from the server:\n']);
+        console.log(messages)
         messages.forEach((item) => {
             io.emit('log', ['****\t'+item]);
             console.log(item);
@@ -135,6 +135,7 @@ io.on('connection', (socket)=> {
                   };  
                   io.of('/').to(room).emit('join_room_response', response);
                   serverLog('join_room succeeded', JSON.stringify(response));   
+                  serverLog(room)
                   if (room != "Lobby"){
                       send_game_update(socket,room,'initial update');
                   }
@@ -509,9 +510,8 @@ function create_new_game() {
 }
 
 function send_game_update(socket, game_id, message){
-    //**Check to see if game with game_id exists */
-    //**MAke sure there are only two people in the room */
-    //**Assign this socket a color */
+ 
+
     //**Send game update */
     //**Check if game is over */
 
@@ -521,13 +521,73 @@ function send_game_update(socket, game_id, message){
         games[game_id] = create_new_game();
     }
 
-    //**Send game update */
-    let payload = {
+        //**MAke sure there are only two people in the room */
+    //**Assign this socket a color */
+    io.of('/').to(game_id).allSockets().then((sockets) => {
+      
+      const iterator = sockets[Symbol.iterator]();
+      if (sockets.size >=1){
+          let first = iterator.next().value;
+          if ((games[game_id].player_white.socket != first) && (games[game_id].player_black.socket != first)){
+              /*Player does not have a color */
+              if (games[game_id].player_white.socket === ""){
+                  /*This player should be white */
+                  console.log("White is assigned to "+first);
+                  games[game_id].player_white.socket = first;
+                  games[game_id].player_white.username = players[first].username;
+              }
+              else if (games[game_id].player_black.socket === ""){
+                /*This player should be black */
+                console.log("Black is assigned to "+first);
+                games[game_id].player_black.socket = first;
+                games[game_id].player_black.username = players[first].username;
+            }
+            else {
+                /*This player should be kicked out */
+                console.log(" Kicking this player out: "+first);
+                io.in(first).socketsLeave([game_id]);
+
+            }
+          }
+      }
+
+      if (sockets.size >=2){
+        let second = iterator.next().value;
+        if ((games[game_id].player_white.socket != second) && (games[game_id].player_black.socket != second)){
+            /*Player does not have a color */
+            if (games[game_id].player_white.socket === ""){
+                /*This player should be white */
+                console.log("White is assigned to "+second);
+                games[game_id].player_white.socket = second;
+                games[game_id].player_white.username = players[second].username;
+            }
+            else if (games[game_id].player_black.socket === ""){
+              /*This player should be black */
+              console.log("Black is assigned to "+second);
+              games[game_id].player_black.socket = second;
+              games[game_id].player_black.username = players[second].username;
+          }
+          else {
+              /*This player should be kicked out */
+              console.log(" Kicking this player out: "+second);
+              io.in(second).socketsLeave([game_id]);
+              
+          }
+        }
+    }
+      
+        //**Send game update */
+      let payload = {
         result: 'success',
         game_id: game_id,
         game: games[game_id],
         message: message
-    }
-    io.of("/").to(game_id).emit('game_update', payload);
+      }
+      console.log("server sending game update " + payload)
+      io.of("/").to(game_id).emit('game_update', payload);
+    })
+
+
+
 
 }

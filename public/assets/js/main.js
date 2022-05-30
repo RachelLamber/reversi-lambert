@@ -1,7 +1,7 @@
 function getIRIParameterValue(requestedKey){
     let pageIRI= window.location.search.substring(1);
     let pageIRIVariables = pageIRI.split('&');
-    for(i=0; i<pageIRIVariables.length; i++){
+    for(var i=0; i<pageIRIVariables.length; i++){
         let data = pageIRIVariables[i].split('=');
         let key = data[0];
         let value = data[1];
@@ -141,7 +141,8 @@ socket.on('game_start_response',(payload)=> {
     let newNode = makeStartGameButton();
     $('.socket_'+payload.socket_id+' button').replaceWith(newNode);
     /**Jump to the game page */
-    window.location.href = 'game.html?username='+username+'&gameid='+payload.game_id;
+    console.log("loading game html")
+    window.location.href = 'game.html?username='+username+'&game_id='+payload.game_id;
 })
 
 socket.on('join_room_response',(payload)=> {
@@ -245,7 +246,7 @@ socket.on('send_chat_message_response',(payload)=> {
     newNode.show("fade",500);
 })
 
-let old_game = [
+let old_board = [
     ['?','?','?','?','?','?','?','?'],
     ['?','?','?','?','?','?','?','?'],
     ['?','?','?','?','?','?','?','?'],
@@ -255,6 +256,8 @@ let old_game = [
     ['?','?','?','?','?','?','?','?'],
     ['?','?','?','?','?','?','?','?']
   ];
+
+let my_color ="";
 
 socket.on('game_update',(payload)=> {
     if((typeof payload == 'undefined') || (payload === null)){
@@ -272,7 +275,19 @@ socket.on('game_update',(payload)=> {
         return;
     }
 
-    /**Update mt color */
+    /**Update my color */
+    if (socket.id === payload.game.player_white.socket) {
+        my_color = 'white';
+    }
+    else if (socket.id === payload.game.player_black.socket) {
+        my_color = 'black';
+    }
+    else {
+        window.location.href = 'lobby.html?username='+username;
+        return;
+    }
+
+    $('#my_color').html('<h3 id="my_color">I am '+my_color+'</h3>');
 
     /**Animate chanegs to the board */
     for (let row = 0; row <8; row++){
@@ -318,12 +333,14 @@ socket.on('game_update',(payload)=> {
                 altTag = "white token";
             }
             else {
+                console.log("old_board state is " + old_board[row][column] + "for row " + row + " col " + column)
+                console.log("board state is " + board[row][column] + "for row " + row + " col " + column)
                 graphic = 'error.gif';
                 altTag = "error";
             }
 
             const t = Date.now();
-            $('#'+row+'_'+column).html('<img class="img-fluid" src="assets\'images\''+graphic+'?time='+t+'" alt="'+altTag+'" />');
+            $('#'+row+'_'+column).html('<img class="img-fluid" src="assets\\images\\'+graphic+'?time='+t+'" alt="'+altTag+'" />');
         }
         }
     }
@@ -344,8 +361,8 @@ $( () => {
     $('#chatMessage').keypress( function (e){
         let key = e.which;
         if (key == 13){
-          $('button[id = chatButton]').click();
-          return false;
+            $('button[id = chatButton]').click();
+            return false;
         }
-      })
+        })
 });
