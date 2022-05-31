@@ -474,6 +474,106 @@ io.on('connection', (socket)=> {
 
     });
 
+    socket.on('play_token', (payload) => {
+        serverLog('Server recieved a command', '\'play_token\'', JSON.stringify(payload));
+        if ((typeof payload == 'undefined') || (payload===null)){
+            response = {};
+            response.result = 'fail';
+            response.message = 'client did not send a payload';
+            socket.emit('play_token_response',response);
+            serverLog('play_token command failed', JSON.stringify(response));
+            return;
+        }
+        let player = players[socket.id];
+        if ((typeof player == 'undefined') || (player===null)){
+            response = {};
+            response.result = 'fail';
+            response.message = 'play token came from an unregistered player';
+            socket.emit('play_token_response',response);
+            serverLog('play_token command failed', JSON.stringify(response));
+            return;
+        }
+
+        let username = player.username;
+        if ((typeof username == 'undefined') || (username===null)){
+            response = {};
+            response.result = 'fail';
+            response.message = 'play toklen command did not come from valid user name';
+            socket.emit('play_token_response',response);
+            serverLog('play_token command failed', JSON.stringify(response));
+            return;
+        }
+
+        let game_id = player.room;
+        if ((typeof game_id == 'undefined') || (game_id===null)){
+            response = {};
+            response.result = 'fail';
+            response.message = 'thr was no valid game associated w paly token cmmd';
+            socket.emit('play_token_response',response);
+            serverLog('play_token command failed', JSON.stringify(response));
+            return;
+        }
+
+        let row = player.row;
+        if ((typeof row == 'undefined') || (row===null)){
+            response = {};
+            response.result = 'fail';
+            response.message = 'row not valid';
+            socket.emit('play_token_response',response);
+            serverLog('play_token command failed', JSON.stringify(response));
+            return;
+        }
+
+        let column = player.column;
+        if ((typeof column == 'undefined') || (column===null)){
+            response = {};
+            response.result = 'fail';
+            response.message = 'column not valid';
+            socket.emit('play_token_response',response);
+            serverLog('play_token command failed', JSON.stringify(response));
+            return;
+        }
+
+        let color = player.color;
+        if ((typeof color == 'undefined') || (color===null)){
+            response = {};
+            response.result = 'fail';
+            response.message = 'color not valid';
+            socket.emit('play_token_response',response);
+            serverLog('play_token command failed', JSON.stringify(response));
+            return;
+        }
+
+        let game = games[game_id];
+        if ((typeof game == 'undefined') || (game===null)){
+            response = {};
+            response.result = 'fail';
+            response.message = 'game not valid';
+            socket.emit('play_token_response',response);
+            serverLog('play_token command failed', JSON.stringify(response));
+            return;
+        }
+        
+        let response = {
+            result: 'success'
+
+        };
+        socket.emit('play_token_response', response);
+
+        /*Execute the move */
+        if (color === 'white'){
+            game.board[row][column] = 'w';
+            game.whose_turn = 'black';
+        }
+        else if (color === 'black'){
+            game.board[row][column] = 'b';
+            game.whose_turn = 'white';
+        }
+        
+        send_game_update(socket,game_id, 'playede a token');
+
+    });
+
 
 });
 
@@ -524,6 +624,9 @@ function send_game_update(socket, game_id, message){
         //**MAke sure there are only two people in the room */
     //**Assign this socket a color */
     io.of('/').to(game_id).allSockets().then((sockets) => {
+        for (const s of sockets) {
+            console.log("Server evaluating game update for socket " + s)
+        }
       
       const iterator = sockets[Symbol.iterator]();
       if (sockets.size >=1){

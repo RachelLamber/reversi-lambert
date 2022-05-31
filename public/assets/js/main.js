@@ -348,11 +348,37 @@ socket.on('game_update',(payload)=> {
             $('#'+row+'_'+column).off('click');
             if(board[row][column] === ' '){
                 $('#'+row+'_'+column).addClass('hovered_over');
+                $('#'+row+'_'+column).click(((r,c) => {
+                    return (() => {
+                        let payload = {
+                            row: r,
+                            column: c,
+                            color: my_color
+                        };
+                       socket.emit('play_token', payload); 
+                    });
+
+                } )(row,column));
+            }
+            else {
+                $('#'+row+'_'+column).removeClass('hovered_over');
             }
         }
         }
     }
     old_board = board;
+})
+
+socket.on('play_token_response',(payload)=> {
+    if((typeof payload == 'undefined') || (payload === null)){
+        console.log('server did not send a payload');
+        return;
+    }
+    if(payload.result === 'fail'){
+        console.log(payload.message);
+        return;
+    }
+
 })
 
 /*request to join the chatroom */
