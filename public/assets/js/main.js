@@ -276,6 +276,9 @@ socket.on('game_update',(payload)=> {
     }
 
     /**Update my color */
+    console.log("Evaluating color - local socket id=" +socket.id)
+    console.log("Evaluating color - white expexted to be " + payload.game.player_white.socket)
+    console.log("Evaluating color - bkacl expexted to be " + payload.game.player_black.socket)
     if (socket.id === payload.game.player_white.socket) {
         my_color = 'white';
     }
@@ -297,7 +300,7 @@ socket.on('game_update',(payload)=> {
             let graphic = "";
             let altTag = "";
             if ((old_board[row][column] === '?') && (board[row][column] === ' ')){
-                graphic = 'Empty.gif';
+                graphic = 'Emptys.gif';
                 altTag = "empty space";
             }
             else if ((old_board[row][column] === '?') && (board[row][column] === 'w')){
@@ -341,6 +344,11 @@ socket.on('game_update',(payload)=> {
 
             const t = Date.now();
             $('#'+row+'_'+column).html('<img class="img-fluid" src="assets\\images\\'+graphic+'?time='+t+'" alt="'+altTag+'" />');
+            
+            $('#'+row+'_'+column).off('click');
+            if(board[row][column] === ' '){
+                $('#'+row+'_'+column).addClass('hovered_over');
+            }
         }
         }
     }
