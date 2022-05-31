@@ -477,7 +477,7 @@ io.on('connection', (socket)=> {
     socket.on('play_token', (payload) => {
         serverLog('Server recieved a command', '\'play_token\'', JSON.stringify(payload));
         if ((typeof payload == 'undefined') || (payload===null)){
-            response = {};
+            let response = {};
             response.result = 'fail';
             response.message = 'client did not send a payload';
             socket.emit('play_token_response',response);
@@ -486,7 +486,7 @@ io.on('connection', (socket)=> {
         }
         let player = players[socket.id];
         if ((typeof player == 'undefined') || (player===null)){
-            response = {};
+            let response = {};
             response.result = 'fail';
             response.message = 'play token came from an unregistered player';
             socket.emit('play_token_response',response);
@@ -496,7 +496,7 @@ io.on('connection', (socket)=> {
 
         let username = player.username;
         if ((typeof username == 'undefined') || (username===null)){
-            response = {};
+            let response = {};
             response.result = 'fail';
             response.message = 'play toklen command did not come from valid user name';
             socket.emit('play_token_response',response);
@@ -506,7 +506,7 @@ io.on('connection', (socket)=> {
 
         let game_id = player.room;
         if ((typeof game_id == 'undefined') || (game_id===null)){
-            response = {};
+            let response = {};
             response.result = 'fail';
             response.message = 'thr was no valid game associated w paly token cmmd';
             socket.emit('play_token_response',response);
@@ -516,7 +516,7 @@ io.on('connection', (socket)=> {
 
         let row = player.row;
         if ((typeof row == 'undefined') || (row===null)){
-            response = {};
+            let response = {};
             response.result = 'fail';
             response.message = 'row not valid';
             socket.emit('play_token_response',response);
@@ -526,7 +526,7 @@ io.on('connection', (socket)=> {
 
         let column = player.column;
         if ((typeof column == 'undefined') || (column===null)){
-            response = {};
+            let response = {};
             response.result = 'fail';
             response.message = 'column not valid';
             socket.emit('play_token_response',response);
@@ -536,7 +536,7 @@ io.on('connection', (socket)=> {
 
         let color = player.color;
         if ((typeof color == 'undefined') || (color===null)){
-            response = {};
+            let response = {};
             response.result = 'fail';
             response.message = 'color not valid';
             socket.emit('play_token_response',response);
@@ -546,7 +546,7 @@ io.on('connection', (socket)=> {
 
         let game = games[game_id];
         if ((typeof game == 'undefined') || (game===null)){
-            response = {};
+            let response = {};
             response.result = 'fail';
             response.message = 'game not valid';
             socket.emit('play_token_response',response);
@@ -570,7 +570,7 @@ io.on('connection', (socket)=> {
             game.whose_turn = 'white';
         }
         
-        send_game_update(socket,game_id, 'playede a token');
+        send_game_update(socket,game_id, 'played a token');
 
     });
 
