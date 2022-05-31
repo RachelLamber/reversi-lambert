@@ -514,17 +514,17 @@ io.on('connection', (socket)=> {
             return;
         }
 
-        let row = player.row;
+        let row = payload.row;
         if ((typeof row == 'undefined') || (row===null)){
             let response = {};
             response.result = 'fail';
-            response.message = 'row not valid';
+            response.message = 'row not valid'+row;
             socket.emit('play_token_response',response);
             serverLog('play_token command failed', JSON.stringify(response));
             return;
         }
 
-        let column = player.column;
+        let column = payload.column;
         if ((typeof column == 'undefined') || (column===null)){
             let response = {};
             response.result = 'fail';
@@ -534,7 +534,7 @@ io.on('connection', (socket)=> {
             return;
         }
 
-        let color = player.color;
+        let color = payload.color;
         if ((typeof color == 'undefined') || (color===null)){
             let response = {};
             response.result = 'fail';
