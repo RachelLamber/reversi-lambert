@@ -381,6 +381,29 @@ socket.on('play_token_response',(payload)=> {
 
 })
 
+socket.on('game_over',(payload)=> {
+    if((typeof payload == 'undefined') || (payload === null)){
+        console.log('server did not send a payload');
+        return;
+    }
+    if(payload.result === 'fail'){
+        console.log(payload.message);
+        return;
+    }
+
+    /**Anounce with button to lobby */
+    let nodeA = $("<div id='game_over'></div>");
+    let nodeB = $("<h1>Game Over</h1>");
+    let nodeC = $("<h2>"+payload.who_won+" won!</h2>");
+    let nodeD = $("<a href='lobby.html?username="+username+"' class='btn btn-lg btn-success' role='button'>Return to Lobby</a> ");
+    nodeA.append(nodeB);
+    nodeA.append(nodeC);
+    nodeA.append(nodeD);
+    nodeA.hide();
+    $('#game_over').replaceWith(nodeA);
+    nodeA.show("fade", 1000);
+})
+
 /*request to join the chatroom */
 
 $( () => {

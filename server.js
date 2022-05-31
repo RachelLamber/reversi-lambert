@@ -690,7 +690,24 @@ function send_game_update(socket, game_id, message){
       io.of("/").to(game_id).emit('game_update', payload);
     })
 
+    /*Check if game is over */
+    let count = 0;
+    for (let row =0; row <8; row++){
+        for (let column = 0; column < 8; column++){
+            if(games[game_id].board[row][column] != ' '){
+                count++;
+            }
+        }
+    }
 
-
+    if (count === 64){
+        let payload = {
+            result: 'success',
+            game_id: game_id,
+            game: games[game_id],
+            who_won: 'everyone'
+        }
+        io.in(game_id).emit('game_over',payload);
+    }
 
 }
