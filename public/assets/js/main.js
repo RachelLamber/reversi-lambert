@@ -300,7 +300,7 @@ socket.on('game_update',(payload)=> {
             let graphic = "";
             let altTag = "";
             if ((old_board[row][column] === '?') && (board[row][column] === ' ')){
-                graphic = 'Emptys.gif';
+                graphic = 'Emptyt.gif';
                 altTag = "empty space";
             }
             else if ((old_board[row][column] === '?') && (board[row][column] === 'w')){
